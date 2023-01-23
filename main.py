@@ -5,10 +5,33 @@ from requests import get
 from sys import argv
 from os import mkdir
 from os.path import join
+import threading
+
 
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
 
+class Waiter:
+    def __init__(self, string):
+        self.string     = string
+        self.is_runing  = True
+        self.thread     = threading.Thread(target=self.start_waiter, daemon=True)
+        self.thread.start()
+    
+    def stop(self):
+        self.is_runing  = False
+        self.thread.join()
+
+    def start_waiter(self):
+        i = 0
+        chars = "/-\\|"
+        while self.is_runing:
+            print(f"{self.string} [{chars[i]}]", end='\r', flush=True)
+            time.sleep(0.1)
+            i = (i + 1) % 4
+        print(f"{self.string} [✓]")
+
+w = Waiter("Coping, please wait...")
 
 url = argv[1]
 
@@ -38,3 +61,4 @@ def dl_all(base_dir, path):
             f.write(r.content)
 
 dl_all(base_url, loc)
+w.stop()
