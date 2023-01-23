@@ -6,7 +6,7 @@ from sys import argv
 from os import mkdir
 from os.path import join
 import threading
-
+import time
 
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
