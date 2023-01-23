@@ -6,10 +6,14 @@ from sys import argv
 from os import mkdir
 from os.path import join
 
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
+
+
 url = argv[1]
-loc = argv[2]
 
 base_url = '/'.join(url.split('/')[:3]) + '/'
+loc = '/'.join(url.split('/')[3:])
 
 def dl_all(base_dir, path):
     r = get(base_dir + path)
